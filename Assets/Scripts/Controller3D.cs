@@ -26,15 +26,32 @@ public class Controller3D : MonoBehaviour {
 
     Rigidbody rb;
 
-    public bool allowWalk = true;
+    bool _allowWalk = true;
 
+    public bool allowWalk
+    {
+        get
+        {
+            return _allowWalk;
+        }
+
+        set
+        {
+            _allowWalk = value;
+            if (value)
+            {
+                rb.velocity = Vector3.zero;
+                rb.angularVelocity = Vector3.zero;
+            }
+        }
+    }
     void Start()
     {
         rb = GetComponentInChildren<Rigidbody>();
     }
 
 	void Update () {
-	    if (allowWalk)
+	    if (_allowWalk)
         {
             var walkForceMoment = Input.GetAxis("Vertical") * walkForce * Time.deltaTime;
             var rotationForceMoment = Input.GetAxis("Horizontal") * rotationForce * Time.deltaTime;
