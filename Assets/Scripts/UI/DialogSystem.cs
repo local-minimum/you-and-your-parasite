@@ -186,12 +186,23 @@ public class DialogSystem : MonoBehaviour {
     {
         talking = false;
         cycleStep = DialogCycle.None;
+        bool grow = growths > questions.Length / 2;
+
         if (OnCompletedDialog != null)
         {
-            OnCompletedDialog(growths > questions.Length / 2 ? DialogOutcome.Grow : DialogOutcome.Shrink);
+            OnCompletedDialog(grow ? DialogOutcome.Grow : DialogOutcome.Shrink);
         }
         growths = 0;
         SceneManager.UnloadScene(sceneName);
+        if (grow)
+        {
+            GameMonitor.IncreaseTickTick();
+        } else
+        {
+            GameMonitor.DecreaseTickTick();
+        }
+
+
     }
 
 }
