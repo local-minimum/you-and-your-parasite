@@ -26,7 +26,7 @@ public class Controller3D : MonoBehaviour {
 
     Rigidbody rb;
 
-    bool allowWalk = true;
+    public bool allowWalk = true;
 
     void Start()
     {

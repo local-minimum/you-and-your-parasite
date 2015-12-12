@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 [System.Serializable]
 public class DialogState
@@ -31,6 +32,9 @@ public class DialogSystem : MonoBehaviour {
 
     public static event AnswerType OnNewAnswer;
     public static event CompletedInteraction OnCompletedDialog;
+
+    [SerializeField]
+    string sceneName;
 
     [SerializeField]
     Text mainText;
@@ -187,7 +191,7 @@ public class DialogSystem : MonoBehaviour {
             OnCompletedDialog(growths > questions.Length / 2 ? DialogOutcome.Grow : DialogOutcome.Shrink);
         }
         growths = 0;
-        Application.UnloadLevel("/interaction");
+        SceneManager.UnloadScene(sceneName);
     }
 
 }
