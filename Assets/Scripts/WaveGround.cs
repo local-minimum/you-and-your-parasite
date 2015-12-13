@@ -6,7 +6,7 @@ public class WaveGround : MonoBehaviour {
     [SerializeField]
     AnimationCurve wave;
 
-    [SerializeField, Range(0, 1f)]
+    [SerializeField, Range(0, 5f)]
     float waveHeight = 0.05f;
 
     [SerializeField, Range(1, 10)]
