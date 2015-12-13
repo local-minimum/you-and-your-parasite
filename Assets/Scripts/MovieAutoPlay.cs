@@ -56,7 +56,7 @@ public class MovieAutoPlay : MonoBehaviour {
     void End()
     {
         movie = null;
-        GameMonitor.AllowPlayerToWalk();
+        GameMonitor.ResizeDone();
         SceneManager.UnloadScene(sceneName);
     }
 }

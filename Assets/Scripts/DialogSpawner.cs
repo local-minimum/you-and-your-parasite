@@ -5,11 +5,11 @@ using UnityEngine.SceneManagement;
 public class DialogSpawner : MonoBehaviour {
 
     [SerializeField]
-    string dialog;
+    string dialogScene;
 
-    [SerializeField]
-    bool allowed;
-    
+    public bool allowed;
+    public string text;
+
     void OnTriggerEnter(Collider other)
     {
         var player = other.GetComponentInParent<Controller3D>();
@@ -20,7 +20,8 @@ public class DialogSpawner : MonoBehaviour {
             {
                 allowed = false;
                 player.allowWalk = false;
-                SceneManager.LoadScene(dialog, LoadSceneMode.Additive);
+                GameMonitor.statusText.ClearText();
+                SceneManager.LoadScene(dialogScene, LoadSceneMode.Additive);
             }
         }
     }

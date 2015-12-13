@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 
 public class GameMonitor : MonoBehaviour {
@@ -13,6 +13,18 @@ public class GameMonitor : MonoBehaviour {
 
     [SerializeField]
     string ticTicResize;
+
+    StatusText _statusText;
+
+    bool givenFirstQuest = false;
+
+    [SerializeField, Range(0, 10)]
+    float firstQuestDelay = 1;
+
+    [SerializeField, Range(0, 20)]
+    float beforeEndDelay = 10f;
+
+    QuestGiver questGiver;
 
     static GameMonitor _instance;
 
@@ -42,10 +54,26 @@ public class GameMonitor : MonoBehaviour {
             Destroy(this.gameObject);
 	}
 
+    void Update()
+    {
+        if (!givenFirstQuest && firstQuestDelay < Time.timeSinceLevelLoad)
+        {
+            givenFirstQuest = true;
+            questGiver.QueueFirstQuest();
+        }
+    }
+
+    void Start()
+    {
+        _statusText = FindObjectOfType<StatusText>();
+        questGiver = FindObjectOfType<QuestGiver>();
+    }
+
     public static void IncreaseTickTick(string status)
     {
         instance.ticTicSize++;
         instance.didGrow = true;
+        statusText.ForceText(status);
         SceneManager.LoadScene(instance.ticTicResize, LoadSceneMode.Additive);
     }
 
@@ -53,7 +81,14 @@ public class GameMonitor : MonoBehaviour {
     {
         instance.ticTicSize--;
         instance.didGrow = false;
+        statusText.ForceText(status);
         SceneManager.LoadScene(instance.ticTicResize, LoadSceneMode.Additive);
+    }
+
+    public static void ResizeDone()
+    {
+        AllowPlayerToWalk();
+        instance.NextQuest();
     }
 
     public static void AllowPlayerToWalk()
@@ -75,5 +110,31 @@ public class GameMonitor : MonoBehaviour {
         {
             return instance.didGrow;
         }
+    }
+
+    public static StatusText statusText
+    {
+        get
+        {
+            return instance._statusText;
+        }
+    }
+
+    void NextQuest()
+    {
+        if (Mathf.Abs(ticTicSize) == 3 || !questGiver.QueueQuest())
+            StartCoroutine(End());
+
+    }
+
+    IEnumerator<WaitForSeconds> End()
+    {
+        yield return new WaitForSeconds(beforeEndDelay);
+        if (ticTicSize == -3)
+            _statusText.ForceText("Free from tictic");
+        else if (ticTicSize == 3)
+            _statusText.ForceText("Tictic is the world");
+        else
+            _statusText.ForceText("Stuck in limbo");
     }
 }
