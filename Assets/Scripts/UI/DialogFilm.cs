@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 
 public class DialogFilm : MonoBehaviour {
     [SerializeField]
@@ -13,6 +13,9 @@ public class DialogFilm : MonoBehaviour {
 
     [SerializeField]
     MovieTexture shrinkFilm;
+
+    [SerializeField, Range(0, 5)]
+    float delayReaction = 1f;
 
 
     void PlayFilm(MovieTexture film, bool loop)
@@ -42,12 +45,15 @@ public class DialogFilm : MonoBehaviour {
         DialogSystem.OnNewDialogState -= DialogStateChange;
     }
 
-    private void AnswerReaction(DialogOutcome type)
+    private void AnswerReaction(DialogOutcome type, DialogCycle step)
     {
+        if (step != DialogCycle.PlayerInput)
+            return;
+
         if (type == DialogOutcome.Grow)
-            AnswerGrow();
+            StartCoroutine(AnswerGrow());
         else
-            AnswerShrink();
+            StartCoroutine(AnswerShrink());
     }
 
     void Update()
@@ -57,13 +63,15 @@ public class DialogFilm : MonoBehaviour {
 
     }
 
-    void AnswerGrow()
+    IEnumerator<WaitForSeconds> AnswerGrow()
     {
+        yield return new WaitForSeconds(delayReaction);
         PlayFilm(growthFilm, true);
     }
 
-    void AnswerShrink()
+    IEnumerator<WaitForSeconds> AnswerShrink()
     {
+        yield return new WaitForSeconds(delayReaction);
         PlayFilm(shrinkFilm, true);
     }
 

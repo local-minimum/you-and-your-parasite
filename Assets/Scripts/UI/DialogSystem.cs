@@ -39,10 +39,9 @@ public enum AnswerSide { Left, Right};
 
 public enum DialogCycle {None, Intro, PlayerInput, Answer, Reaction};
 
-public delegate void AnswerType(DialogOutcome type);
-
 public enum DialogOutcome { Grow, Shrink };
 
+public delegate void AnswerType(DialogOutcome type, DialogCycle step);
 public delegate void CompletedInteraction(DialogOutcome outcome);
 public delegate void DialogStep(DialogCycle step);
 
@@ -136,6 +135,12 @@ public class DialogSystem : MonoBehaviour {
 
             if (answerOutcome == DialogOutcome.Grow)
                 growths++;
+
+            if (OnNewAnswer != null)
+            {
+                OnNewAnswer(answerOutcome, DialogCycle.PlayerInput);
+            }
+
         }
         StepCycle();
     }
@@ -206,13 +211,15 @@ public class DialogSystem : MonoBehaviour {
         {
             if (OnNewAnswer != null)
             {
-                OnNewAnswer(answerOutcome);
+                OnNewAnswer(answerOutcome, DialogCycle.Reaction);
             }
             icon.sprite = monsterAvatar;
             mainText.color = monsterTextColor;
             if (questionIndex == questions.Length - 1)
             {
                 mainText.text = grow ? gifting.GrowthTalk : gifting.ShrinkTalk;
+                if (OnNewAnswer != null)
+                    OnNewAnswer(grow ? DialogOutcome.Grow : DialogOutcome.Shrink, DialogCycle.PlayerInput);
             } else
             {
                 mainText.text = answerOutcome == DialogOutcome.Grow ? questions[questionIndex].ReactionGrow : questions[questionIndex].ReactionShrink;

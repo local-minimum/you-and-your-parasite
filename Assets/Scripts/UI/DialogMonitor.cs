@@ -19,9 +19,10 @@ public class DialogMonitor : MonoBehaviour {
         DialogSystem.OnNewAnswer -= Response;
     }
 
-	void Response(DialogOutcome response)
+	void Response(DialogOutcome response, DialogCycle step)
     {
-        meter.Increase(response);
+        if (step == DialogCycle.Reaction)
+            meter.Increase(response);
 
     }
 }
