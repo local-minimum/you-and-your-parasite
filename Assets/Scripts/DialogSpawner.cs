@@ -18,9 +18,9 @@ public class DialogSpawner : MonoBehaviour {
         {
             if (allowed)
             {
-                SceneManager.LoadScene(dialog, LoadSceneMode.Additive);
                 allowed = false;
                 player.allowWalk = false;
+                SceneManager.LoadScene(dialog, LoadSceneMode.Additive);
             }
         }
     }

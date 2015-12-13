@@ -38,7 +38,7 @@ public class Controller3D : MonoBehaviour {
         set
         {
             _allowWalk = value;
-            if (value)
+            if (!value)
             {
                 rb.velocity = Vector3.zero;
                 rb.angularVelocity = Vector3.zero;

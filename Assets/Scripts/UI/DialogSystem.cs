@@ -18,6 +18,23 @@ public class DialogState
     public string ReactionShrink;
 }
 
+[System.Serializable]
+public class DialogIntro
+{
+    public bool Player;
+    public string Greeting;
+}
+
+[System.Serializable]
+public class GiftSequence
+{
+    public string GrowthTalk;
+    public string GrowthStatus;
+    public string ShrinkTalk;
+    public string ShrintStatus;
+}
+
+
 public enum AnswerSide { Left, Right};
 
 public enum DialogCycle {None, Intro, PlayerInput, Answer, Reaction};
@@ -52,7 +69,24 @@ public class DialogSystem : MonoBehaviour {
     Text answerRight;
 
     [SerializeField]
+    Image icon;
+
+    [SerializeField]
+    Sprite playerAvatar;
+
+    [SerializeField]
+    Sprite monsterAvatar;
+
+    [SerializeField]
+    DialogIntro[] introSequence;
+
+    int introIndex;
+
+    [SerializeField]
     DialogState[] questions;
+
+    [SerializeField]
+    GiftSequence gifting;
 
     int questionIndex = 0;
 
@@ -87,15 +121,14 @@ public class DialogSystem : MonoBehaviour {
 
     public void Answer(AnswerSide answer)
     {
-        if (OnNewAnswer != null)
+        if (cycleStep == DialogCycle.PlayerInput)
         {
-            OnNewAnswer(answers[ answer]);
+
+            answerOutcome = answers[answer];
+
+            if (answerOutcome == DialogOutcome.Grow)
+                growths++;
         }
-        answerOutcome = answers[answer];
-
-        if (answerOutcome == DialogOutcome.Grow)
-            growths++;
-
         StepCycle();
     }
 
@@ -103,10 +136,10 @@ public class DialogSystem : MonoBehaviour {
         set
         {
             buttonLeft.SetActive(value);
-            buttonRight.SetActive(value);
             answerLeft.enabled = value;
             answerRight.enabled = value;
             mainText.enabled = !value;
+            icon.enabled = !value;
         }
     }
 
@@ -138,11 +171,16 @@ public class DialogSystem : MonoBehaviour {
             StepCycle();
 
     }
-
+    
     void StepCycle()
     {
-        Debug.Log(cycleStep);
-        if (cycleStep == DialogCycle.Intro)
+
+        if (introIndex < introSequence.Length)
+        {
+            mainText.text = introSequence[introIndex].Greeting;
+            icon.sprite = introSequence[introIndex].Player ? playerAvatar : monsterAvatar;
+            introIndex++;
+        } else if (cycleStep == DialogCycle.Intro)
         {         
             SetAnswers();
             inAnswerMode = true;
@@ -151,18 +189,23 @@ public class DialogSystem : MonoBehaviour {
         } else if (cycleStep == DialogCycle.PlayerInput)
         {
             mainText.text = answerOutcome == DialogOutcome.Grow ? questions[questionIndex].AnswerGrow : questions[questionIndex].AnswerShrink;
+            icon.sprite = playerAvatar;
             inAnswerMode = false;
             cycleStep = DialogCycle.Answer;
         } else if (cycleStep == DialogCycle.Answer)
         {
+            if (OnNewAnswer != null)
+            {
+                OnNewAnswer(answerOutcome);
+            }
+            icon.sprite = monsterAvatar;
             if (questionIndex == questions.Length - 1)
             {
-                Complete();
+                mainText.text = grow ? gifting.GrowthTalk : gifting.ShrinkTalk;
             } else
             {
                 mainText.text = answerOutcome == DialogOutcome.Grow ? questions[questionIndex].ReactionGrow : questions[questionIndex].ReactionShrink;
             }
-
             cycleStep = DialogCycle.Reaction;
         } else if (cycleStep == DialogCycle.Reaction || cycleStep == DialogCycle.None)
         {
@@ -174,7 +217,13 @@ public class DialogSystem : MonoBehaviour {
             if (questionIndex < questions.Length)
             {
                 cycleStep = DialogCycle.Intro;
+                icon.sprite = monsterAvatar;
                 mainText.text = questions[questionIndex].Intro;
+                if (mainText.text == "")
+                    StepCycle();
+            } else
+            {
+                Complete();
             }
         }
 
@@ -184,25 +233,32 @@ public class DialogSystem : MonoBehaviour {
 
     void Complete()
     {
+        introIndex = 0;
         talking = false;
         cycleStep = DialogCycle.None;
-        bool grow = growths > questions.Length / 2;
-
         if (OnCompletedDialog != null)
         {
             OnCompletedDialog(grow ? DialogOutcome.Grow : DialogOutcome.Shrink);
         }
-        growths = 0;
         SceneManager.UnloadScene(sceneName);
         if (grow)
         {
-            GameMonitor.IncreaseTickTick();
+            GameMonitor.IncreaseTickTick(gifting.GrowthStatus);
         } else
         {
-            GameMonitor.DecreaseTickTick();
+            GameMonitor.DecreaseTickTick(gifting.ShrintStatus);
         }
+        growths = 0;
 
+    }
 
+    bool grow
+    {
+        get
+        {
+            return growths > questions.Length / 2;
+
+        }
     }
 
 }

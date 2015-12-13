@@ -1,12 +1,18 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class GameMonitor : MonoBehaviour {
 
     int ticTicSize = 0;
 
+    bool didGrow = false;
+
     [SerializeField]
     Controller3D playerController;
+
+    [SerializeField]
+    string ticTicResize;
 
     static GameMonitor _instance;
 
@@ -36,20 +42,38 @@ public class GameMonitor : MonoBehaviour {
             Destroy(this.gameObject);
 	}
 
-    public static void IncreaseTickTick()
+    public static void IncreaseTickTick(string status)
     {
         instance.ticTicSize++;
-        AllowPlayerToWalk();
+        instance.didGrow = true;
+        SceneManager.LoadScene(instance.ticTicResize, LoadSceneMode.Additive);
     }
 
-    public static void DecreaseTickTick()
+    public static void DecreaseTickTick(string status)
     {
         instance.ticTicSize--;
-        AllowPlayerToWalk();
+        instance.didGrow = false;
+        SceneManager.LoadScene(instance.ticTicResize, LoadSceneMode.Additive);
     }
 
     public static void AllowPlayerToWalk()
     {
         instance.playerController.allowWalk = true;
+    }
+
+    public static int TicTicSize
+    {
+        get
+        {
+            return instance.ticTicSize;
+        }
+    }
+
+    public static bool DidGrow
+    {
+        get
+        {
+            return instance.didGrow;
+        }
     }
 }
