@@ -57,15 +57,6 @@ public class GameMonitor : MonoBehaviour {
             Destroy(this.gameObject);
 	}
 
-    void Update()
-    {
-        if (!givenFirstQuest && firstQuestDelay < Time.timeSinceLevelLoad)
-        {
-            givenFirstQuest = true;
-            questGiver.QueueFirstQuest();
-        }
-    }
-
     void Start()
     {
         _statusText = FindObjectOfType<StatusText>();

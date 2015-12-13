@@ -25,7 +25,10 @@ public class QuestGiver : MonoBehaviour {
     }
 
     public void QueueFirstQuest() {
-        nextQuest = firstQuest;        
+        if (nextQuest == null)
+            nextQuest = firstQuest;
+
+        transform.GetChild(0).gameObject.SetActive(true);    
     }
 
     public bool QueueQuest()
