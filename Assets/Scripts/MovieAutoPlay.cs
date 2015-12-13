@@ -34,14 +34,13 @@ public class MovieAutoPlay : MonoBehaviour {
         int index = GameMonitor.TicTicSize;
         if (GameMonitor.DidGrow) {
             if (index < 0)
-                index = growthMovies.Length - index;
+                index = growthMovies.Length + index;
 
             return growthMovies[index];
         }
         else {
             if (index < 0)
-                index = shrinkMovies.Length - index;
-
+                index = shrinkMovies.Length + index;
             return shrinkMovies[index];
         }
     }
