@@ -36,7 +36,7 @@ public class QuestGiver : MonoBehaviour {
         if (otherQuests.Count == 0)
             return false;
 
-        nextQuest = otherQuests[Random.Range(0, otherQuests.Count)];
+        nextQuest = otherQuests[Random.Range(0, otherQuests.Count)];        
         return true;
     }
 
