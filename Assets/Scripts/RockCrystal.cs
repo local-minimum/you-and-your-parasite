@@ -3,7 +3,6 @@ using System.Collections;
 
 public class RockCrystal : MonoBehaviour {
 
-    GameObject seed;
     GameObject[] others;
 
     float nextSpawn;
@@ -18,7 +17,6 @@ public class RockCrystal : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        seed = transform.GetChild(0).gameObject;
         others = new GameObject[transform.childCount - 1];
         for (int i = 0; i < others.Length; i++)
             others[i] = transform.GetChild(i + 1).gameObject;
