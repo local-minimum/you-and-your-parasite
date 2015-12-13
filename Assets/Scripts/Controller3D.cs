@@ -27,6 +27,9 @@ public class Controller3D : MonoBehaviour {
     Rigidbody rb;
 
     bool _allowWalk = true;
+    [SerializeField]
+
+    bool applyRotationToTransform = true;
 
     public bool allowWalk
     {
@@ -68,12 +71,22 @@ public class Controller3D : MonoBehaviour {
 
             if (rotating)
             {
-                rb.velocity = rb.velocity * velocityDecay;
-                rb.AddTorque(rotationForceMoment * rb.transform.up);
-                rb.angularVelocity = Vector3.ClampMagnitude(rb.angularVelocity, maxRotation);
-            } else
-                rb.angularVelocity = Vector3.zero;
-
+                if (applyRotationToTransform)
+                {
+                    rb.transform.Rotate(Vector3.up, rotationForceMoment,Space.Self);
+                }
+                else
+                {
+                    rb.velocity = rb.velocity * velocityDecay;
+                    rb.AddTorque(rotationForceMoment * rb.transform.up);
+                    rb.angularVelocity = Vector3.ClampMagnitude(rb.angularVelocity, maxRotation);
+                }
+            }
+            else
+            {
+                if (!applyRotationToTransform)
+                    rb.angularVelocity = Vector3.zero;
+            }
         }
 	}
 

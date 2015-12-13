@@ -44,11 +44,13 @@ public delegate void AnswerType(DialogOutcome type);
 public enum DialogOutcome { Grow, Shrink };
 
 public delegate void CompletedInteraction(DialogOutcome outcome);
+public delegate void DialogStep(DialogCycle step);
 
 public class DialogSystem : MonoBehaviour {
 
     public static event AnswerType OnNewAnswer;
     public static event CompletedInteraction OnCompletedDialog;
+    public static event DialogStep OnNewDialogState;
 
     [SerializeField]
     string sceneName;
@@ -101,7 +103,13 @@ public class DialogSystem : MonoBehaviour {
     int growths = 0;
 
     Dictionary<AnswerSide, DialogOutcome> answers = new Dictionary<AnswerSide, DialogOutcome>();
-    
+
+    [SerializeField]
+    Color32 playerTextColor;
+
+    [SerializeField]
+    Color32 monsterTextColor;
+
 	void Start () {
         leftKey = (KeyCode)PlayerPrefs.GetInt("Key.X", (int)'x');
         rightKey = (KeyCode)PlayerPrefs.GetInt("Key.C", (int)'c');
@@ -179,6 +187,7 @@ public class DialogSystem : MonoBehaviour {
         {
             mainText.text = introSequence[introIndex].Greeting;
             icon.sprite = introSequence[introIndex].Player ? playerAvatar : monsterAvatar;
+            mainText.color = introSequence[introIndex].Player ? playerTextColor : monsterTextColor;
             introIndex++;
         } else if (cycleStep == DialogCycle.Intro)
         {         
@@ -189,6 +198,7 @@ public class DialogSystem : MonoBehaviour {
         } else if (cycleStep == DialogCycle.PlayerInput)
         {
             mainText.text = answerOutcome == DialogOutcome.Grow ? questions[questionIndex].AnswerGrow : questions[questionIndex].AnswerShrink;
+            mainText.color = playerTextColor;
             icon.sprite = playerAvatar;
             inAnswerMode = false;
             cycleStep = DialogCycle.Answer;
@@ -199,6 +209,7 @@ public class DialogSystem : MonoBehaviour {
                 OnNewAnswer(answerOutcome);
             }
             icon.sprite = monsterAvatar;
+            mainText.color = monsterTextColor;
             if (questionIndex == questions.Length - 1)
             {
                 mainText.text = grow ? gifting.GrowthTalk : gifting.ShrinkTalk;
@@ -218,6 +229,7 @@ public class DialogSystem : MonoBehaviour {
             {
                 cycleStep = DialogCycle.Intro;
                 icon.sprite = monsterAvatar;
+                mainText.color = monsterTextColor;
                 mainText.text = questions[questionIndex].Intro;
                 if (mainText.text == "")
                     StepCycle();
@@ -227,6 +239,8 @@ public class DialogSystem : MonoBehaviour {
             }
         }
 
+        if (OnNewDialogState != null)
+            OnNewDialogState(cycleStep);
         talking = cycleStep != DialogCycle.PlayerInput;
 
     }

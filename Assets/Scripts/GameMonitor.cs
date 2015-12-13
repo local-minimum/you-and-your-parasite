@@ -9,6 +9,9 @@ public class GameMonitor : MonoBehaviour {
     bool didGrow = false;
 
     [SerializeField]
+    Camera _worldCam;
+
+    [SerializeField]
     Controller3D playerController;
 
     [SerializeField]
@@ -117,6 +120,14 @@ public class GameMonitor : MonoBehaviour {
         get
         {
             return instance._statusText;
+        }
+    }
+    
+    public static Camera worldCam
+    {
+        get
+        {
+            return instance._worldCam;
         }
     }
 
