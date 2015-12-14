@@ -53,6 +53,14 @@ public class QuestGiver : MonoBehaviour {
         transform.GetChild(0).gameObject.SetActive(true);    
     }
 
+    public bool HasMoreQuests
+    {
+        get
+        {
+            return otherQuests.Count > 0;
+        }
+    }
+
     public bool QueueQuest()
     {
         if (otherQuests.Count == 0)

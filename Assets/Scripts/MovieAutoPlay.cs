@@ -14,12 +14,16 @@ public class MovieAutoPlay : MonoBehaviour {
     [SerializeField]
     bool loop = false;
 
+    [SerializeField]
+    bool endOnClipEnd = true;
+
     void Start() {
         movie = GetMovie();
         GetComponent<Renderer>().material.mainTexture = movie;
         if (movie == null)
         {
-            End();
+            if (endOnClipEnd)
+                End();
         }
         else
         {
@@ -49,7 +53,8 @@ public class MovieAutoPlay : MonoBehaviour {
     {
         if (movie != null && !movie.isPlaying)
         {
-            End();
+            if (endOnClipEnd)
+                End();
         }
     }
 

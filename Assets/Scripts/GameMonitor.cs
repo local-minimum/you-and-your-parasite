@@ -17,6 +17,23 @@ public class GameMonitor : MonoBehaviour {
     [SerializeField]
     string ticTicResize;
 
+    [SerializeField]
+    string ticTicBeforeEndSize;
+
+    [SerializeField]
+    string endBig;
+
+    [SerializeField]
+    string endSmall;
+
+    [SerializeField]
+    string endBoring;
+
+    [SerializeField]
+    string menu;
+
+    bool endingIt = false;
+
     StatusText _statusText;
 
     bool givenFirstQuest = false;
@@ -67,16 +84,23 @@ public class GameMonitor : MonoBehaviour {
     {
         instance.ticTicSize++;
         instance.didGrow = true;
-        Talker.PushMessage(status);
-        SceneManager.LoadScene(instance.ticTicResize, LoadSceneMode.Additive);
+        _dialogOutcome(status);
     }
 
     public static void DecreaseTickTick(string status)
     {
         instance.ticTicSize--;
         instance.didGrow = false;
+        _dialogOutcome(status);
+    }
+
+    static void _dialogOutcome(string status)
+    {
         Talker.PushMessage(status);
-        SceneManager.LoadScene(instance.ticTicResize, LoadSceneMode.Additive);
+        if (Mathf.Abs(instance.ticTicSize) == 3)
+            SceneManager.LoadScene(instance.ticTicBeforeEndSize, LoadSceneMode.Additive);
+        else
+            SceneManager.LoadScene(instance.ticTicResize, LoadSceneMode.Additive);
     }
 
     public static void ResizeDone()
@@ -150,11 +174,19 @@ public class GameMonitor : MonoBehaviour {
     IEnumerator<WaitForSeconds> End()
     {
         yield return new WaitForSeconds(beforeEndDelay);
+        endingIt = true;
         if (ticTicSize == -3)
-            _statusText.ForceText("Free from tictic");
+            SceneManager.LoadScene(endSmall, LoadSceneMode.Additive);
         else if (ticTicSize == 3)
-            _statusText.ForceText("Tictic is the world");
+            SceneManager.LoadScene(endBig, LoadSceneMode.Additive);
         else
-            _statusText.ForceText("Stuck in limbo");
+            SceneManager.LoadScene(endBoring, LoadSceneMode.Additive);
     }
+
+    void Update() {
+        if (endingIt && SceneManager.sceneCount == 1 || Input.GetButtonDown("Cancel"))
+            SceneManager.LoadScene(menu);
+
+    }
+
 }

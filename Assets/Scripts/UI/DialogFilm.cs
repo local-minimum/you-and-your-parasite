@@ -84,4 +84,16 @@ public class DialogFilm : MonoBehaviour {
         else
             PlayFilm(shrinkFilm, true);
     }
+
+    public void PlayShrink()
+    {
+        PlayFilm(shrinkFilm, true);
+
+    }
+
+    public void PlayGrow()
+    {
+        PlayFilm(growthFilm, true);
+
+    }
 }
