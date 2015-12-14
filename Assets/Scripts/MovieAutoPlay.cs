@@ -4,15 +4,15 @@ using UnityEngine.SceneManagement;
 public class MovieAutoPlay : MonoBehaviour {
 
     [SerializeField]
-    string sceneName;
-
-    [SerializeField]
     MovieTexture[] growthMovies;
 
     [SerializeField]
     MovieTexture[] shrinkMovies;
 
     MovieTexture movie;
+
+    [SerializeField]
+    bool loop = false;
 
     void Start() {
         movie = GetMovie();
@@ -23,7 +23,7 @@ public class MovieAutoPlay : MonoBehaviour {
         }
         else
         {
-            movie.loop = false;
+            movie.loop = loop;
             movie.Play();
         }
 	}
@@ -53,10 +53,10 @@ public class MovieAutoPlay : MonoBehaviour {
         }
     }
 
-    void End()
+    public void End()
     {
         movie = null;
         GameMonitor.ResizeDone();
-        SceneManager.UnloadScene(sceneName);
+        SceneManager.UnloadScene(gameObject.scene.name);
     }
 }

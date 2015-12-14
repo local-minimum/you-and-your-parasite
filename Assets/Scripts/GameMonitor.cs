@@ -67,7 +67,7 @@ public class GameMonitor : MonoBehaviour {
     {
         instance.ticTicSize++;
         instance.didGrow = true;
-        statusText.ForceText(status);
+        Talker.PushMessage(status);
         SceneManager.LoadScene(instance.ticTicResize, LoadSceneMode.Additive);
     }
 
@@ -75,7 +75,7 @@ public class GameMonitor : MonoBehaviour {
     {
         instance.ticTicSize--;
         instance.didGrow = false;
-        statusText.ForceText(status);
+        Talker.PushMessage(status);
         SceneManager.LoadScene(instance.ticTicResize, LoadSceneMode.Additive);
     }
 

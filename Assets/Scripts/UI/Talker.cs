@@ -38,9 +38,14 @@ public class Talker : MonoBehaviour {
 
     void Close()
     {
-        SceneManager.UnloadScene(gameObject.scene.name);
-        GameMonitor.AllowPlayerToWalk = true;
-
+        var player = FindObjectOfType<MovieAutoPlay>();
+        if (player)
+            player.End();
+        else
+        {
+            SceneManager.UnloadScene(gameObject.scene.name);
+            GameMonitor.AllowPlayerToWalk = true;
+        }
     }
 
     public static void PushMessage(string message)
