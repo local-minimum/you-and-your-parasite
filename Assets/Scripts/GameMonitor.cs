@@ -32,6 +32,12 @@ public class GameMonitor : MonoBehaviour {
     [SerializeField]
     string menu;
 
+    [SerializeField]
+    AudioClip ticTicIncrease;
+
+    [SerializeField]
+    AudioClip ticTicDecrease;
+
     bool endingIt = false;
 
     StatusText _statusText;
@@ -84,6 +90,9 @@ public class GameMonitor : MonoBehaviour {
     {
         instance.ticTicSize++;
         instance.didGrow = true;
+        var audio = instance.playerController.GetComponentInChildren<AudioSource>();
+        if (audio)
+            audio.PlayOneShot(instance.ticTicIncrease);
         _dialogOutcome(status);
     }
 
@@ -91,6 +100,9 @@ public class GameMonitor : MonoBehaviour {
     {
         instance.ticTicSize--;
         instance.didGrow = false;
+        var audio = instance.playerController.GetComponentInChildren<AudioSource>();
+        if (audio)
+            audio.PlayOneShot(instance.ticTicDecrease);
         _dialogOutcome(status);
     }
 

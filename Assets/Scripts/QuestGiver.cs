@@ -5,6 +5,9 @@ using UnityEngine.SceneManagement;
 public class QuestGiver : MonoBehaviour {
 
     [SerializeField]
+    AudioSource aSource;
+
+    [SerializeField]
     string talkScene;
 
     [SerializeField]
@@ -15,6 +18,18 @@ public class QuestGiver : MonoBehaviour {
 
     [SerializeField]
     string[] upsetPhrases;
+
+    [SerializeField]
+    AudioClip upsetClip;
+
+    [SerializeField, Range(0, 1)]
+    float upsetVolume;
+
+    [SerializeField]
+    AudioClip talkClip;
+
+    [SerializeField, Range(0, 1)]
+    float talkVolume;
 
     [SerializeField, Range(0, 10)]
     float questDelay;
@@ -38,6 +53,7 @@ public class QuestGiver : MonoBehaviour {
     void GiveQuest()
     {
         nextQuest.allowed = true;
+        aSource.PlayOneShot(talkClip, talkVolume);
         Talker.PushMessage(nextQuest.text);
         SceneManager.LoadScene(talkScene, LoadSceneMode.Additive);
         if (nextQuest != firstQuest)
@@ -73,6 +89,7 @@ public class QuestGiver : MonoBehaviour {
 
     public void BecomeUpset()
     {
+        aSource.PlayOneShot(upsetClip, upsetVolume);
         Talker.PushMessage(upsetPhrases[Random.Range(0, upsetPhrases.Length)]);
         SceneManager.LoadScene(talkScene, LoadSceneMode.Additive);
     }
