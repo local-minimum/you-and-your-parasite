@@ -75,5 +75,13 @@ public class DialogFilm : MonoBehaviour {
         PlayFilm(shrinkFilm, true);
     }
 
-
+    public void RandomPlayOne()
+    {
+        if (Random.value < 0.33f)
+            PlayFilm(baseFilm, true);
+        else if (Random.value < 0.5f)
+            PlayFilm(growthFilm, true);
+        else
+            PlayFilm(shrinkFilm, true);
+    }
 }
