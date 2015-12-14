@@ -50,12 +50,12 @@ public class GameMonitor : MonoBehaviour {
         return GO.AddComponent<GameMonitor>();
     }
 
-	void Awake () {
+    void Awake() {
         if (_instance == null)
             _instance = this;
         else if (_instance != this)
             Destroy(this.gameObject);
-	}
+    }
 
     void Start()
     {
@@ -81,13 +81,16 @@ public class GameMonitor : MonoBehaviour {
 
     public static void ResizeDone()
     {
-        AllowPlayerToWalk();
+        AllowPlayerToWalk = true;
         instance.NextQuest();
     }
 
-    public static void AllowPlayerToWalk()
+    public static bool AllowPlayerToWalk
     {
-        instance.playerController.allowWalk = true;
+        set
+        {
+            instance.playerController.allowWalk = value;
+        }
     }
 
     public static int TicTicSize
@@ -113,7 +116,7 @@ public class GameMonitor : MonoBehaviour {
             return instance._statusText;
         }
     }
-    
+
     public static Camera worldCam
     {
         get
@@ -127,6 +130,21 @@ public class GameMonitor : MonoBehaviour {
         if (Mathf.Abs(ticTicSize) == 3 || !questGiver.QueueQuest())
             StartCoroutine(End());
 
+    }
+
+    public static KeyCode leftKey {
+        get {
+            return (KeyCode)PlayerPrefs.GetInt("Key.X", (int)'x');
+        }
+    }
+
+    public static KeyCode rightKey
+    {
+
+        get
+        {
+            return (KeyCode)PlayerPrefs.GetInt("Key.C", (int)'c');
+        }
     }
 
     IEnumerator<WaitForSeconds> End()

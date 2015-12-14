@@ -110,8 +110,8 @@ public class DialogSystem : MonoBehaviour {
     Color32 monsterTextColor;
 
 	void Start () {
-        leftKey = (KeyCode)PlayerPrefs.GetInt("Key.X", (int)'x');
-        rightKey = (KeyCode)PlayerPrefs.GetInt("Key.C", (int)'c');
+        leftKey = GameMonitor.leftKey;
+        rightKey = GameMonitor.rightKey;
         mainText.enabled = false;
         inAnswerMode = false;
 	}
