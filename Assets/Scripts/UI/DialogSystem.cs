@@ -37,7 +37,7 @@ public class GiftSequence
 
 public enum AnswerSide { Left, Right};
 
-public enum DialogCycle {None, Intro, PlayerInput, Answer, Reaction};
+public enum DialogCycle {None, Intro, PlayerInput, Answer, Reaction, FinishUp, Gifting};
 
 public enum DialogOutcome { Grow, Shrink };
 
@@ -194,20 +194,23 @@ public class DialogSystem : MonoBehaviour {
             icon.sprite = introSequence[introIndex].Player ? playerAvatar : monsterAvatar;
             mainText.color = introSequence[introIndex].Player ? playerTextColor : monsterTextColor;
             introIndex++;
-        } else if (cycleStep == DialogCycle.Intro)
-        {         
+        }
+        else if (cycleStep == DialogCycle.Intro)
+        {
             SetAnswers();
             inAnswerMode = true;
             cycleStep = DialogCycle.PlayerInput;
 
-        } else if (cycleStep == DialogCycle.PlayerInput)
+        }
+        else if (cycleStep == DialogCycle.PlayerInput)
         {
             mainText.text = answerOutcome == DialogOutcome.Grow ? questions[questionIndex].AnswerGrow : questions[questionIndex].AnswerShrink;
             mainText.color = playerTextColor;
             icon.sprite = playerAvatar;
             inAnswerMode = false;
             cycleStep = DialogCycle.Answer;
-        } else if (cycleStep == DialogCycle.Answer)
+        }
+        else if (cycleStep == DialogCycle.Answer)
         {
             if (OnNewAnswer != null)
             {
@@ -215,17 +218,18 @@ public class DialogSystem : MonoBehaviour {
             }
             icon.sprite = monsterAvatar;
             mainText.color = monsterTextColor;
-            if (questionIndex == questions.Length - 1)
+            mainText.text = answerOutcome == DialogOutcome.Grow ? questions[questionIndex].ReactionGrow : questions[questionIndex].ReactionShrink;
+
+            if (questionIndex == questions.Length - 1 && mainText.text == "")
             {
-                mainText.text = grow ? gifting.GrowthTalk : gifting.ShrinkTalk;
-                if (OnNewAnswer != null)
-                    OnNewAnswer(grow ? DialogOutcome.Grow : DialogOutcome.Shrink, DialogCycle.PlayerInput);
-            } else
-            {
-                mainText.text = answerOutcome == DialogOutcome.Grow ? questions[questionIndex].ReactionGrow : questions[questionIndex].ReactionShrink;
+                cycleStep = DialogCycle.FinishUp;
             }
-            cycleStep = DialogCycle.Reaction;
-        } else if (cycleStep == DialogCycle.Reaction || cycleStep == DialogCycle.None)
+            else
+            {
+                cycleStep = DialogCycle.Reaction;
+            }
+        }
+        else if (cycleStep == DialogCycle.Reaction || cycleStep == DialogCycle.None)
         {
             if (cycleStep == DialogCycle.None)
                 questionIndex = 0;
@@ -242,8 +246,21 @@ public class DialogSystem : MonoBehaviour {
                     StepCycle();
             } else
             {
-                Complete();
+                cycleStep = DialogCycle.FinishUp;
             }
+        }
+
+        if (cycleStep == DialogCycle.FinishUp) {
+            icon.sprite = monsterAvatar;
+            mainText.color = monsterTextColor;
+            mainText.text = grow ? gifting.GrowthTalk : gifting.ShrinkTalk;
+            if (OnNewAnswer != null)
+                OnNewAnswer(grow ? DialogOutcome.Grow : DialogOutcome.Shrink, DialogCycle.PlayerInput);
+
+            cycleStep = DialogCycle.Gifting;
+        } else if (cycleStep == DialogCycle.Gifting)
+        {
+                Complete();
         }
 
         if (OnNewDialogState != null)
