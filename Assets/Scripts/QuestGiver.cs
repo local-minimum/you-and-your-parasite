@@ -40,4 +40,8 @@ public class QuestGiver : MonoBehaviour {
         return true;
     }
 
+    public void BecomeUpset()
+    {
+
+    }
 }

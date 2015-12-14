@@ -28,6 +28,8 @@ public class ToadJumps : MonoBehaviour {
     [SerializeField, Range(0, 1)]
     float jumpRate = 0.5f;
 
+    bool allowJump = true;
+
     IEnumerator<WaitForSeconds> Jump()
     {
         jumping = true;
@@ -52,10 +54,21 @@ public class ToadJumps : MonoBehaviour {
 
     void Update() {
 
-        if (!jumping && Random.value  < jumpRate * Time.deltaTime)
+        if (allowJump && !jumping && Random.value  < jumpRate * Time.deltaTime)
             StartCoroutine(Jump());
     }
 
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.GetComponentInParent<Controller3D>())
+            allowJump = false;
+    }
 
+    void OnTriggerExit(Collider other)
+    {
+        if (other.GetComponentInParent<Controller3D>())
+            allowJump = true;
+
+    }
 
 }

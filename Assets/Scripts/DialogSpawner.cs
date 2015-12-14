@@ -22,7 +22,13 @@ public class DialogSpawner : MonoBehaviour {
                 player.allowWalk = false;
                 GameMonitor.statusText.ClearText();
                 SceneManager.LoadScene(dialogScene, LoadSceneMode.Additive);
+            } else
+            {
+                var tictic = other.GetComponentInChildren<QuestGiver>();
+                if (tictic)
+                    tictic.BecomeUpset();
             }
+
         }
     }
 }
