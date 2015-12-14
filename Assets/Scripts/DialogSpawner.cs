@@ -21,7 +21,9 @@ public class DialogSpawner : MonoBehaviour {
                 allowed = false;
                 player.allowWalk = false;
                 GameMonitor.statusText.ClearText();
-                SceneManager.LoadScene(dialogScene, LoadSceneMode.Additive);
+                GameMonitor.WatchingMovie = true;
+                Application.LoadLevelAdditive(dialogScene);
+                //SceneManager.LoadScene(dialogScene, LoadSceneMode.Additive);
             } else
             {
                 var tictic = other.GetComponentInChildren<QuestGiver>();

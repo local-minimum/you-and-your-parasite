@@ -40,20 +40,25 @@ public class PickupTicTic : MonoBehaviour {
     {
         delayStart = Time.timeSinceLevelLoad;
         GameMonitor.AllowPlayerToWalk = false;
-        SceneManager.LoadScene(introScene, LoadSceneMode.Additive);
         introing = true;
+        for (int i = 0; i < transform.childCount; i++)
+            transform.GetChild(i).gameObject.SetActive(false);
+        GetComponent<Collider>().enabled = false;
+        //SceneManager.LoadScene(introScene, LoadSceneMode.Additive);
+        GameMonitor.WatchingMovie = true;
+        Application.LoadLevelAdditive(introScene);
     }
 
     void Update()
     {
-        if (introing && SceneManager.sceneCount == 1)
+        if (introing && !GameMonitor.WatchingMovie) // SceneManager.sceneCount == 1)
         {
 
             Debug.Log("Giving quest");
 
             questGiver.QueueFirstQuest();
             GameMonitor.AllowPlayerToWalk = true;
-            gameObject.SetActive(false);
+            introing = false;
 
         }
         else if (questAudioSource != null && Time.timeSinceLevelLoad - delayStart > delayedClip)

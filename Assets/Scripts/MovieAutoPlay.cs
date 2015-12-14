@@ -62,6 +62,8 @@ public class MovieAutoPlay : MonoBehaviour {
     {
         movie = null;
         GameMonitor.ResizeDone();
-        SceneManager.UnloadScene(gameObject.scene.name);
+        //SceneManager.UnloadScene(gameObject.scene.name);
+        GameMonitor.WatchingMovie = false;
+        Application.UnloadLevel(gameObject.scene.name);
     }
 }

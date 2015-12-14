@@ -6,6 +6,9 @@ public class GameMonitor : MonoBehaviour {
 
     int ticTicSize = 0;
 
+    bool watchingMovie = false;
+
+
     bool didGrow = false;
 
     [SerializeField]
@@ -109,11 +112,18 @@ public class GameMonitor : MonoBehaviour {
     static void _dialogOutcome(string status)
     {
         Talker.PushMessage(status);
-        if (Mathf.Abs(instance.ticTicSize) == 3)
-            SceneManager.LoadScene(instance.ticTicBeforeEndSize, LoadSceneMode.Additive);
-        else
-            SceneManager.LoadScene(instance.ticTicResize, LoadSceneMode.Additive);
         instance.questGiver.SetSize(instance.ticTicSize);
+        GameMonitor.WatchingMovie = true;
+        if (Mathf.Abs(instance.ticTicSize) == 3)
+        {
+            //SceneManager.LoadScene(instance.ticTicBeforeEndSize, LoadSceneMode.Additive);
+            Application.LoadLevelAdditive(instance.ticTicBeforeEndSize);
+        }
+        else
+        {
+            //SceneManager.LoadScene(instance.ticTicResize, LoadSceneMode.Additive);
+            Application.LoadLevelAdditive(instance.ticTicResize);
+        }
     }
 
     public static void ResizeDone()
@@ -188,19 +198,45 @@ public class GameMonitor : MonoBehaviour {
     {
         yield return new WaitForSeconds(beforeEndDelay);
         endingIt = true;
+        GameMonitor.WatchingMovie = true;
         Debug.Log("End " + ticTicSize);
         if (ticTicSize == -3)
-            SceneManager.LoadScene(endSmall, LoadSceneMode.Additive);
+        {
+            //SceneManager.LoadScene(endSmall, LoadSceneMode.Additive);
+            Application.LoadLevelAdditive(endSmall);
+        } 
         else if (ticTicSize == 3)
-            SceneManager.LoadScene(endBig, LoadSceneMode.Additive);
+        {
+            //SceneManager.LoadScene(endBig, LoadSceneMode.Additive);
+            Application.LoadLevelAdditive(endBig);
+        }
         else
-            SceneManager.LoadScene(endBoring, LoadSceneMode.Additive);
+        {
+            //SceneManager.LoadScene(endBoring, LoadSceneMode.Additive);
+            Application.LoadLevel(endBoring);
+        }
     }
 
     void Update() {
-        if (endingIt && SceneManager.sceneCount == 1)
-            SceneManager.LoadScene(menu);
+        if (endingIt && !watchingMovie) // SceneManager.sceneCount == 1)
+        {
+            //SceneManager.LoadScene(menu);
+            Application.LoadLevel(menu);
+        } 
 
     }
+
+    public static bool WatchingMovie {
+        get
+        {
+            return instance.watchingMovie;
+        }
+
+        set
+        {
+            instance.watchingMovie = value;
+        }
+    }
+
 
 }

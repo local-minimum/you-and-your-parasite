@@ -43,8 +43,10 @@ public class Talker : MonoBehaviour {
             player.End();
         else
         {
-            SceneManager.UnloadScene(gameObject.scene.name);
             GameMonitor.AllowPlayerToWalk = true;
+            GameMonitor.WatchingMovie = false;
+            //SceneManager.UnloadScene(gameObject.scene.name);
+            Application.UnloadLevel(gameObject.scene.name);
         }
     }
 

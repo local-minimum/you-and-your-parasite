@@ -38,11 +38,17 @@ public class MovieAutoPlay2 : MonoBehaviour {
             lastPlay = Time.timeSinceLevelLoad;
         else if (Time.timeSinceLevelLoad - lastPlay > afterPlayWait)
         {
-            SceneManager.UnloadScene(gameObject.scene.name);
+            //SceneManager.UnloadScene(gameObject.scene.name);
+            GameMonitor.WatchingMovie = false;
+            Application.UnloadLevel(gameObject.scene.name);
         }
 
         if (Time.timeSinceLevelLoad - sceneStart > allowExitAfter && (Input.GetKeyDown(leftKey) || Input.GetKeyDown(rightKey)))
-            SceneManager.UnloadScene(gameObject.scene.name);
+        {
+            GameMonitor.WatchingMovie = false;
+            // SceneManager.UnloadScene(gameObject.scene.name);
+            Application.UnloadLevel(gameObject.scene.name);
+        }
 
 	}
 }
