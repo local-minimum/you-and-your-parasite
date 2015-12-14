@@ -188,6 +188,7 @@ public class GameMonitor : MonoBehaviour {
     {
         yield return new WaitForSeconds(beforeEndDelay);
         endingIt = true;
+        Debug.Log("End " + ticTicSize);
         if (ticTicSize == -3)
             SceneManager.LoadScene(endSmall, LoadSceneMode.Additive);
         else if (ticTicSize == 3)
