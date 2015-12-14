@@ -196,7 +196,7 @@ public class GameMonitor : MonoBehaviour {
     }
 
     void Update() {
-        if (endingIt && SceneManager.sceneCount == 1 || Input.GetButtonDown("Cancel"))
+        if (endingIt && SceneManager.sceneCount == 1)
             SceneManager.LoadScene(menu);
 
     }
