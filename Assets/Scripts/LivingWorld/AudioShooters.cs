@@ -25,6 +25,7 @@ public class AudioShooters : MonoBehaviour {
 
 	void Start () {
         aSource = GetComponent<AudioSource>();
+        aSource.loop = false;
 	}
 	
 	void Update () {
@@ -45,6 +46,7 @@ public class AudioShooters : MonoBehaviour {
     {
         waitingToPlay = false;
         var index = Random.Range(0, clips.Length);
-        aSource.PlayOneShot(clips[index], volumes[index]);
+        aSource.clip = clips[index];
+        aSource.Play();
     }
 }

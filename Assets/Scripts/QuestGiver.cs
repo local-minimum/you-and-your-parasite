@@ -34,6 +34,9 @@ public class QuestGiver : MonoBehaviour {
     [SerializeField, Range(0, 10)]
     float questDelay;
 
+    [SerializeField]
+    float[] scales;
+
     float questSelectTime;
 
     DialogSpawner nextQuest;
@@ -92,5 +95,14 @@ public class QuestGiver : MonoBehaviour {
         aSource.PlayOneShot(upsetClip, upsetVolume);
         Talker.PushMessage(upsetPhrases[Random.Range(0, upsetPhrases.Length)]);
         SceneManager.LoadScene(talkScene, LoadSceneMode.Additive);
+    }
+
+    public void SetSize(int size)
+    {
+        if (size < 0)
+            size += scales.Length;
+
+        transform.GetChild(0).localScale = Vector2.one * scales[size];
+            
     }
 }

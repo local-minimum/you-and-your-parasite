@@ -113,6 +113,7 @@ public class GameMonitor : MonoBehaviour {
             SceneManager.LoadScene(instance.ticTicBeforeEndSize, LoadSceneMode.Additive);
         else
             SceneManager.LoadScene(instance.ticTicResize, LoadSceneMode.Additive);
+        instance.questGiver.SetSize(instance.ticTicSize);
     }
 
     public static void ResizeDone()
