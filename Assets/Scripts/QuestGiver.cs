@@ -61,10 +61,10 @@ public class QuestGiver : MonoBehaviour {
         if (nextQuest != firstQuest)
             otherQuests.Remove(nextQuest);
         GameMonitor.WatchingMovie = true;
-        //SceneManager.LoadScene(talkScene, LoadSceneMode.Additive);
-        Application.LoadLevelAdditive(talkScene);
         nextQuest = null;
-
+        //SceneManager.LoadScene(talkScene, LoadSceneMode.Additive);
+        //Application.LoadLevelAdditive(talkScene);
+        VideoManager.Show(Videos.Talk);
     }
 
     public void QueueFirstQuest() {
@@ -99,7 +99,8 @@ public class QuestGiver : MonoBehaviour {
         Talker.PushMessage(upsetPhrases[Random.Range(0, upsetPhrases.Length)]);
         //SceneManager.LoadScene(talkScene, LoadSceneMode.Additive);
         GameMonitor.WatchingMovie = true;
-        Application.LoadLevelAdditive(talkScene);
+        //Application.LoadLevelAdditive(talkScene);
+        VideoManager.Show(Videos.Talk);
     }
 
     public void SetSize(int size)

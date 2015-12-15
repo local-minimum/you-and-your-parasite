@@ -7,6 +7,9 @@ public class DialogSpawner : MonoBehaviour {
     [SerializeField]
     string dialogScene;
 
+    [SerializeField]
+    Videos dialogVideo;
+
     public bool allowed;
     public string text;
 
@@ -22,8 +25,9 @@ public class DialogSpawner : MonoBehaviour {
                 player.allowWalk = false;
                 GameMonitor.statusText.ClearText();
                 GameMonitor.WatchingMovie = true;
-                Application.LoadLevelAdditive(dialogScene);
+                //Application.LoadLevelAdditive(dialogScene);
                 //SceneManager.LoadScene(dialogScene, LoadSceneMode.Additive);
+                VideoManager.Show(dialogVideo);
             } else
             {
                 var tictic = other.GetComponentInChildren<QuestGiver>();

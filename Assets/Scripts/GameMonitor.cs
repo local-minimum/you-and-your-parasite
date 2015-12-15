@@ -117,12 +117,14 @@ public class GameMonitor : MonoBehaviour {
         if (Mathf.Abs(instance.ticTicSize) == 3)
         {
             //SceneManager.LoadScene(instance.ticTicBeforeEndSize, LoadSceneMode.Additive);
-            Application.LoadLevelAdditive(instance.ticTicBeforeEndSize);
+            //Application.LoadLevelAdditive(instance.ticTicBeforeEndSize);
+            VideoManager.Show(Videos.BeforeEndResize);
         }
         else
         {
             //SceneManager.LoadScene(instance.ticTicResize, LoadSceneMode.Additive);
-            Application.LoadLevelAdditive(instance.ticTicResize);
+            //Application.LoadLevelAdditive(instance.ticTicResize);
+            VideoManager.Show(Videos.Resize);
         }
     }
 
@@ -203,17 +205,20 @@ public class GameMonitor : MonoBehaviour {
         if (ticTicSize == -3)
         {
             //SceneManager.LoadScene(endSmall, LoadSceneMode.Additive);
-            Application.LoadLevelAdditive(endSmall);
+            //Application.LoadLevelAdditive(endSmall);
+            VideoManager.Show(Videos.EndSmall);
         } 
         else if (ticTicSize == 3)
         {
             //SceneManager.LoadScene(endBig, LoadSceneMode.Additive);
-            Application.LoadLevelAdditive(endBig);
+            //Application.LoadLevelAdditive(endBig);
+            VideoManager.Show(Videos.EndBig);
         }
         else
         {
             //SceneManager.LoadScene(endBoring, LoadSceneMode.Additive);
-            Application.LoadLevel(endBoring);
+            //Application.LoadLevel(endBoring);
+            VideoManager.Show(Videos.EndBoring);
         }
     }
 

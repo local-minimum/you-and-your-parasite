@@ -278,7 +278,8 @@ public class DialogSystem : MonoBehaviour {
         {
             OnCompletedDialog(grow ? DialogOutcome.Grow : DialogOutcome.Shrink);
         }
-        SceneManager.UnloadScene(sceneName);
+        //SceneManager.UnloadScene(sceneName);
+        VideoManager.HideAll();
         if (grow)
         {
             GameMonitor.IncreaseTickTick(gifting.GrowthStatus);

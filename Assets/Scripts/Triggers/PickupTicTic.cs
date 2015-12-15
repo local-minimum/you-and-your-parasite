@@ -46,7 +46,8 @@ public class PickupTicTic : MonoBehaviour {
         GetComponent<Collider>().enabled = false;
         //SceneManager.LoadScene(introScene, LoadSceneMode.Additive);
         GameMonitor.WatchingMovie = true;
-        Application.LoadLevelAdditive(introScene);
+        //Application.LoadLevelAdditive(introScene);
+        VideoManager.Show(Videos.Intro);
     }
 
     void Update()

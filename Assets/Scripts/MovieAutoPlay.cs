@@ -17,7 +17,7 @@ public class MovieAutoPlay : MonoBehaviour {
     [SerializeField]
     bool endOnClipEnd = true;
 
-    void Start() {
+    void OnEnable() {
         movie = GetMovie();
         GetComponent<Renderer>().material.mainTexture = movie;
         if (movie == null)
@@ -27,6 +27,7 @@ public class MovieAutoPlay : MonoBehaviour {
         }
         else
         {
+            movie.Stop();
             movie.loop = loop;
             movie.Play();
         }
@@ -64,6 +65,7 @@ public class MovieAutoPlay : MonoBehaviour {
         GameMonitor.ResizeDone();
         //SceneManager.UnloadScene(gameObject.scene.name);
         GameMonitor.WatchingMovie = false;
-        Application.UnloadLevel(gameObject.scene.name);
+        //Application.UnloadLevel(gameObject.scene.name);
+        VideoManager.HideAll();
     }
 }

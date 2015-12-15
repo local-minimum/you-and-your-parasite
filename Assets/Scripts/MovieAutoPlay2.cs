@@ -23,7 +23,7 @@ public class MovieAutoPlay2 : MonoBehaviour {
     KeyCode leftKey;
     KeyCode rightKey;
 
-	void Start () {
+	void OnEnable () {
         leftKey = GameMonitor.leftKey;
         rightKey = GameMonitor.rightKey;
         sceneStart = Time.timeSinceLevelLoad;
@@ -40,14 +40,17 @@ public class MovieAutoPlay2 : MonoBehaviour {
         {
             //SceneManager.UnloadScene(gameObject.scene.name);
             GameMonitor.WatchingMovie = false;
-            Application.UnloadLevel(gameObject.scene.name);
+            //Application.UnloadLevel(gameObject.scene.name);
+            VideoManager.HideAll();
         }
 
         if (Time.timeSinceLevelLoad - sceneStart > allowExitAfter && (Input.GetKeyDown(leftKey) || Input.GetKeyDown(rightKey)))
         {
             GameMonitor.WatchingMovie = false;
             // SceneManager.UnloadScene(gameObject.scene.name);
-            Application.UnloadLevel(gameObject.scene.name);
+            VideoManager.HideAll();
+
+            //Application.UnloadLevel(gameObject.scene.name);
         }
 
 	}

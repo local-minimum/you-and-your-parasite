@@ -13,7 +13,7 @@ public class Talker : MonoBehaviour {
 
     static Queue<string> messages = new Queue<string>();
 
-    void Start () {
+    void OnEnable () {
         leftKey = GameMonitor.leftKey;
         rightKey = GameMonitor.rightKey;
         GameMonitor.AllowPlayerToWalk = false;
@@ -38,6 +38,7 @@ public class Talker : MonoBehaviour {
 
     void Close()
     {
+        messages.Clear();
         var player = FindObjectOfType<MovieAutoPlay>();
         if (player)
             player.End();
@@ -46,12 +47,14 @@ public class Talker : MonoBehaviour {
             GameMonitor.AllowPlayerToWalk = true;
             GameMonitor.WatchingMovie = false;
             //SceneManager.UnloadScene(gameObject.scene.name);
-            Application.UnloadLevel(gameObject.scene.name);
+            //Application.UnloadLevel(gameObject.scene.name);
+            VideoManager.HideAll();
         }
     }
 
     public static void PushMessage(string message)
     {
+        Debug.Log("Added message: " + message);
         messages.Enqueue(message);
     }
 
